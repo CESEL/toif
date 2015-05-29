@@ -5,18 +5,20 @@
   <parent>
     <groupId>com.kdmanalytics</groupId>
     <artifactId>toif</artifactId>
-    <version>1.15.5</version>
+    <version>1.16.0</version>
   </parent>
 
   <groupId>com.kdmanalytics.toif</groupId>
   <artifactId>features</artifactId>
-  <name>TOIF features</name>
+  <name>TOIF Features Module</name>
 
   <packaging>pom</packaging>
-  
+
   <modules>
+      <module>com.kdmanalytics.standAlone.toif.report.feature</module>
       <module>com.kdmanalytics.toif.rcp.feature</module>
       <module>com.kdmanalytics.toif.core.feature</module>
       <module>com.kdmanalytics.toif.3rdparty.feature</module>
+      <module>com.kdmanalytics.toif.report.feature</module>
   </modules>
 </project>

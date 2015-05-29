@@ -4,16 +4,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-		<groupId>com.kdmanalytics.toif</groupId>
-		<artifactId>plugins</artifactId>
-		<version>1.15.5</version>
-	</parent>
+    <groupId>com.kdmanalytics.toif</groupId>
+    <artifactId>plugins</artifactId>
+    <version>1.16.0</version>
+  </parent>
 
-	<groupId>com.kdmanalytics.toif.compile</groupId>
+  <groupId>com.kdmanalytics.toif.compile</groupId>
   <artifactId>com.kdmanalytics.kdm.repositoryMerger</artifactId>
- 
-  <packaging>eclipse-plugin</packaging>
-  
-  <name>Repository Merger</name>
 
+  <packaging>eclipse-plugin</packaging>
+
+  <name>KDM Repository Merger</name>
 </project>

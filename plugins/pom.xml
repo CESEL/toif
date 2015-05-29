@@ -6,18 +6,19 @@
   <parent>
     <groupId>com.kdmanalytics</groupId>
     <artifactId>toif</artifactId>
-    <version>1.15.5</version>
+    <version>1.16.0</version>
   </parent>
 
   <groupId>com.kdmanalytics.toif</groupId>
   <artifactId>plugins</artifactId>
-  <name>TOIF plugins</name>
+  <name>TOIF Plugins Module</name>
   <packaging>pom</packaging>
 
-  
+
   <modules>
     <module>com.kdmanalytics.toif.common</module>
     <module>com.kdmanalytics.toif.report</module>
+    <module>com.kdmanalytics.standAlone.toif.report</module>
     <module>com.kdmanalytics.toif.ccr</module>
     <module>com.kdmanalytics.toif.framework</module>
     <module>com.kdmanalytics.toif.assimilator</module>

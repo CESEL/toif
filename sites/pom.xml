@@ -5,15 +5,15 @@
   <parent>
     <groupId>com.kdmanalytics</groupId>
     <artifactId>toif</artifactId>
-    <version>1.15.5</version>
+    <version>1.16.0</version>
   </parent>
 
   <groupId>com.kdmanalytics.toif</groupId>
   <artifactId>sites</artifactId>
-  <name>TOIF sites</name>
+  <name>TOIF Sites Module</name>
 
   <packaging>pom</packaging>
-  
+
   <modules>
       <module>com.kdmanalytics.toif.repository</module>
   </modules>
