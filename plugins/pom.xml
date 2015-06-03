@@ -30,5 +30,7 @@
     <module>com.kdmanalytics.toif.findbugs</module>
     <module>com.kdmanalytics.toif.rcp</module>
     <module>com.kdmanalytics.kdm.repositoryMerger</module>
+
+    <module>com.kdmanalytics.toif.cesel</module>
   </modules>
 </project>
