@@ -36,6 +36,8 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import ca.concordia.cesel.toif.StatisticalModel;
+import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -512,7 +514,7 @@ public class ToifMerger
      */
     private void createFacts(Document doc, Element element)
     {
-        
+
         final String predicate = element.getAttributeNode("xsi:type").getTextContent();
         
         // for each of the fact types.
@@ -920,10 +922,15 @@ public class ToifMerger
         }
         catch (final RepositoryException e)
         {
+            // TODO louis: why are you continuing afterwards if you say that you cannot continue merging?
             LOG.error("There was a repository exception when trying to merge the TOIF data. Cannot continue!");
             e.printStackTrace();
         }
-        
+
+        Gson gson = new Gson();
+        StatisticalModel model = new StatisticalModel();
+        System.out.println("Does statistical model file exist " + model.doesModelExist());
+
         // for each file in the list of toif files, parse it.
         for (final File file : toifFiles)
         {
@@ -948,84 +955,72 @@ public class ToifMerger
             String[] nameArray = fileName.split("[.]");
             currentToolName = nameArray[nameArray.length - 1];
             //currentToolName = currentFile.getParent();
-            
-            // initialize the local structures that only relate to this file.
-            statements = new ArrayList<ToifStatement>();
-            
-            localResources = new HashMap<Long, ToifRdfResource>();
-            
-            try
-            {
-                // parse the file.
-                parseFile(file);
-            }
+
+            // Determine if the file should be filtered out based on the statistical model
+            if (model.filterFile(nameArray[0])){
+                // TODO add log.debug with info about file which was ignored
+            } else {
+
+                // initialize the local structures that only relate to this file.
+                statements = new ArrayList<ToifStatement>();
+
+                localResources = new HashMap<Long, ToifRdfResource>();
+
+                try {
+                    // parse the file.
+                    parseFile(file);
+                }
             /*
              * catch possible exceptions. try to continue the parse if force has
              * been set.
-             */
-            catch (final ParserConfigurationException e)
-            {
-                if (force)
-                {
-                    e.printStackTrace();
-                    LOG.error("File: " + file.getAbsolutePath()
-                            + " has encountered a parserConfigurationException but the other files will be attempted");
+             */ catch (final ParserConfigurationException e) {
+                    if (force) {
+                        e.printStackTrace();
+                        LOG.error("File: " + file.getAbsolutePath()
+                                + " has encountered a parserConfigurationException but the other files will be attempted");
+                        continue;
+                    } else {
+                        LOG.error("File: " + file.getAbsolutePath()
+                                + " has encountered a parserConfigurationException no further files will be processd.");
+                        return null;
+                    }
+                } catch (final SAXException e) {
+                    if (force) {
+                        e.printStackTrace();
+                        LOG.error("File: " + file.getAbsolutePath() + " has encountered a SAXException but the other files will be attempted");
+                        continue;
+                    } else {
+                        e.printStackTrace();
+                        LOG.error("File: " + file.getAbsolutePath() + " has encountered a SAXException no further files will be processd.");
+                        return null;
+                    }
+                } catch (final IOException e) {
+                    if (force) {
+                        e.printStackTrace();
+                        LOG.error("File: " + file.getAbsolutePath() + " has encountered a IOException but the other files will be attempted");
+                        continue;
+                    } else {
+                        e.printStackTrace();
+                        LOG.error("File: " + file.getAbsolutePath() + " has encountered a IOException no further files will be processd.");
+                        return null;
+                    }
+                }
+
+                ArrayList<Long> keys = new ArrayList<Long>(globalResources.values());
+                if (keys.isEmpty()) {
                     continue;
                 }
-                else
-                {
-                    LOG.error("File: " + file.getAbsolutePath()
-                            + " has encountered a parserConfigurationException no further files will be processd.");
-                    return null;
+                Collections.sort(keys);
+                Collections.reverse(keys);
+                offset = keys.get(0) + 1;
+                depositResources();
+
+                if (DEBUG) {
+                    System.err.println("End of file: " + file);
+
                 }
+                // end of file.
             }
-            catch (final SAXException e)
-            {
-                if (force)
-                {
-                    e.printStackTrace();
-                    LOG.error("File: " + file.getAbsolutePath() + " has encountered a SAXException but the other files will be attempted");
-                    continue;
-                }
-                else
-                {
-                    e.printStackTrace();
-                    LOG.error("File: " + file.getAbsolutePath() + " has encountered a SAXException no further files will be processd.");
-                    return null;
-                }
-            }
-            catch (final IOException e)
-            {
-                if (force)
-                {
-                    e.printStackTrace();
-                    LOG.error("File: " + file.getAbsolutePath() + " has encountered a IOException but the other files will be attempted");
-                    continue;
-                }
-                else
-                {
-                    e.printStackTrace();
-                    LOG.error("File: " + file.getAbsolutePath() + " has encountered a IOException no further files will be processd.");
-                    return null;
-                }
-            }
-            
-            ArrayList<Long> keys = new ArrayList<Long>(globalResources.values());
-            if (keys.isEmpty())
-            {
-                continue;
-            }
-            Collections.sort(keys);
-            Collections.reverse(keys);
-            offset = keys.get(0) + 1;
-            depositResources();
-            
-            if (DEBUG)
-            {
-                System.err.println("End of file: " + file);
-                
-            }
-            // end of file.
         }
         System.out.println("");
         
