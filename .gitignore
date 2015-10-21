@@ -5,3 +5,6 @@ plugins/*/target
 .vagrant
 target
 cachedir
+
+**/*.iml
+.idea/*

@@ -16,6 +16,7 @@
 
 
   <modules>
+      <module>com.google.code.gson</module>
     <module>com.google.guava</module>
     <module>com.lexicalscope.jewelcli</module>
     <module>javax.xml</module>
