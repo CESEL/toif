@@ -1,0 +1,20 @@
+GitExPy
+
+Author: Louis Philippe Querel - l_querel@encs.concordia.ca
+Organisation: CESEL - Concordia University
+
+This script is used to extract the details of a git repository to feed the statistical model in TOIF.
+
+Requirements:
+ python 2.7+
+ python modules required:
+  gitpython - pip install gitpython
+
+You will need to run this script against a local copy of a git repository. 
+Run the following command and replace the path_to_git_repo with the location of the repository:
+
+    python gitex.py path_to_git_repo
+
+Once completed, go to the folder path_to_git_repo/.git/cesel and copy this file to folder where you will run TOIF from
+The modified TOIF should automatically detect the file containing the details to feed it's statistical model and will enable the filtering.
+
